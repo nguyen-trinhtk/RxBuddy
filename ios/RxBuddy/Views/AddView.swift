@@ -4,9 +4,11 @@ import PhotosUI
 /// Scan tab: scan a label (camera or gallery) or enter a medication by hand.
 struct AddView: View {
     // `-screen review` launch argument opens the review screen (handy for previews).
-    @State private var path: [Route] = UserDefaults.standard.string(forKey: "screen") == "review" ? [.review] : []
+    @State private var path: [Route] = UserDefaults.standard.string(forKey: "screen") == "review" ? [.review(Sample.meds)] : []
     @State private var photo: PhotosPickerItem?
     @State private var scanning = false
+    @State private var pickerShown = false
+    @State private var error: String?
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -28,13 +30,17 @@ struct AddView: View {
             .toolbar(.hidden, for: .navigationBar)
             .routes($path)
             .overlay { if scanning { ScanningOverlay() } }
-            .onChange(of: photo) { _, item in if item != nil { startScan() } }
+            .onChange(of: photo) { _, item in if let item { scan(item) } }
+            .photosPicker(isPresented: $pickerShown, selection: $photo, matching: .images)
+            .alert("Couldn't read label", isPresented: Binding(get: { error != nil }, set: { if !$0 { error = nil } })) {
+                Button("OK", role: .cancel) {}
+            } message: { Text(error ?? "") }
         }
     }
 
     private var scanCard: some View {
         VStack(spacing: 24) {
-            Button(action: startScan) {
+            Button { pickerShown = true } label: {  // camera capture lands in Block F
                 VStack(spacing: 16) {
                     Image(systemName: "camera")
                         .font(.system(size: 44, weight: .regular))
@@ -58,13 +64,20 @@ struct AddView: View {
         .card(padding: 24)
     }
 
-    private func startScan() {
+    private func scan(_ item: PhotosPickerItem) {
         withAnimation { scanning = true }
         Task {
-            try? await Task.sleep(for: .seconds(1.4))
-            withAnimation { scanning = false }
-            photo = nil
-            path.append(.review)
+            defer { withAnimation { scanning = false }; photo = nil }
+            do {
+                guard let data = try await item.loadTransferable(type: Data.self),
+                      let jpeg = UIImage(data: data)?.jpegData(compressionQuality: 0.8) else {
+                    throw CocoaError(.fileReadCorruptFile)
+                }
+                let result = try await APIClient.shared.parse(image: jpeg)
+                path.append(.review(result.meds, warnings: result.warnings))
+            } catch {
+                self.error = error.localizedDescription
+            }
         }
     }
 }

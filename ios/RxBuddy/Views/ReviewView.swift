@@ -6,12 +6,16 @@ struct ReviewView: View {
     @State private var meds: [Medication]
     @State private var editing: Medication?
     @State private var analyzing = false
+    @State private var error: String?
+    let warnings: [String]
 
-    init(path: Binding<[Route]>, manual: Bool) {
+    /// `meds == nil` is manual entry: start with one blank med and open its editor.
+    init(path: Binding<[Route]>, meds: [Medication]?, warnings: [String] = []) {
         _path = path
         let blank = Medication(rawName: "", ingredient: "", strength: "", frequencyPerDay: 1, withFood: .any, confidence: 1)
-        _meds = State(initialValue: manual ? [blank] : Sample.meds)
-        _editing = State(initialValue: manual ? blank : nil)
+        _meds = State(initialValue: meds ?? [blank])
+        _editing = State(initialValue: meds == nil ? blank : nil)
+        self.warnings = warnings
     }
 
     var body: some View {
@@ -20,6 +24,7 @@ struct ReviewView: View {
             TopBar(title: "New Prescription") { BackButton() }
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
+                    ForEach(warnings, id: \.self) { Label($0, systemImage: "info.circle").font(.footnote).opacity(0.7) }
                     ForEach(meds) { med in
                         MedReviewCard(med: med) { editing = med }
                     }
@@ -48,15 +53,24 @@ struct ReviewView: View {
         .background(Theme.cream)
         .toolbar(.hidden, for: .navigationBar)
         .medEditSheet($editing, in: $meds)
+        .alert("Couldn't build schedule", isPresented: Binding(get: { error != nil }, set: { if !$0 { error = nil } })) {
+            Button("OK", role: .cancel) {}
+        } message: { Text(error ?? "") }
     }
 
     private func analyze() {
         analyzing = true
         Task {
-            try? await Task.sleep(for: .seconds(1.2))
-            state.meds = meds
-            analyzing = false
-            path.append(.newPlan)
+            defer { analyzing = false }
+            do {
+                let result = try await APIClient.shared.analyze(meds: meds, wake: state.wake, sleep: state.sleep)
+                state.meds = meds
+                state.clashes = result.clashes
+                state.schedule = result.schedule
+                path.append(.newPlan)
+            } catch {
+                self.error = error.localizedDescription
+            }
         }
     }
 }

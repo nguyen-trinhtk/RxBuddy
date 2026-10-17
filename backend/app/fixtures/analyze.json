@@ -1,0 +1,21 @@
+{
+  "clashes": [
+    {"drugs": ["levothyroxine", "calcium carbonate"], "type": "timing_resolvable", "gap_hours": 4,
+     "summary": "Take levothyroxine at least 4 hours apart from calcium.",
+     "source": {"setid": "stub-setid-levothyroxine", "section": "Drug Interactions",
+                "quote": "Administer levothyroxine at least 4 hours before or after drugs known to interfere with absorption."}},
+    {"drugs": ["warfarin", "ibuprofen"], "type": "pharmacist_required", "gap_hours": null,
+     "summary": "Raises bleeding risk.",
+     "source": {"setid": "stub-setid-warfarin", "section": "Warnings",
+                "quote": "NSAIDs may increase the risk of bleeding when coadministered with warfarin."}}
+  ],
+  "schedule": [
+    {"ingredient": "levothyroxine", "time": "07:00", "note": "Empty stomach"},
+    {"ingredient": "warfarin", "time": "08:00", "note": null},
+    {"ingredient": "ibuprofen", "time": "08:00", "note": "With food"},
+    {"ingredient": "calcium carbonate", "time": "11:00", "note": "With food"},
+    {"ingredient": "ibuprofen", "time": "14:00", "note": "With food"},
+    {"ingredient": "calcium carbonate", "time": "19:00", "note": "With food"},
+    {"ingredient": "ibuprofen", "time": "20:00", "note": "With food"}
+  ]
+}

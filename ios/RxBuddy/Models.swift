@@ -24,6 +24,9 @@ struct Medication: Identifiable, Codable, Hashable {
     var withFood: FoodRule
     var confidence: Double
 
+    // `id` is local-only; the API never sends it.
+    enum CodingKeys: String, CodingKey { case rawName, rxcui, ingredient, strength, frequencyPerDay, withFood, confidence }
+
     var dosing: String {
         let times = ["once", "twice", "3 times", "4 times", "5 times", "6 times"][max(0, min(frequencyPerDay, 6) - 1)]
         return "\(strength) · \(times) a day"
@@ -54,6 +57,8 @@ struct Clash: Identifiable, Codable, Hashable {
     var gapHours: Int?
     var summary: String
     var source: LabelSource
+
+    enum CodingKeys: String, CodingKey { case drugs, type, gapHours, summary, source }
 }
 
 struct DoseEvent: Identifiable, Codable, Hashable {
@@ -63,6 +68,7 @@ struct DoseEvent: Identifiable, Codable, Hashable {
     var note: String?
     var status: Status = .upcoming
 
+    enum CodingKeys: String, CodingKey { case ingredient, time, note }
     enum Status: String, Codable { case upcoming, taken, skipped }
 }
 

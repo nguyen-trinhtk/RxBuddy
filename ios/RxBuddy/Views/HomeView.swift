@@ -1,7 +1,7 @@
 import SwiftUI
 
 enum Route: Hashable {
-    case review, manual, plan, newPlan
+    case review([Medication], warnings: [String] = []), manual, plan, newPlan
 }
 
 extension View {
@@ -9,8 +9,8 @@ extension View {
     func routes(_ path: Binding<[Route]>) -> some View {
         navigationDestination(for: Route.self) { route in
             switch route {
-            case .review: ReviewView(path: path, manual: false)
-            case .manual: ReviewView(path: path, manual: true)
+            case .review(let meds, let warnings): ReviewView(path: path, meds: meds, warnings: warnings)
+            case .manual: ReviewView(path: path, meds: nil)
             case .plan: PlanView(isNew: false)
             case .newPlan: PlanView(isNew: true)
             }

@@ -1,0 +1,13 @@
+{
+  "meds": [
+    {"raw_name": "Synthroid 50mcg", "rxcui": "966222", "ingredient": "levothyroxine",
+     "strength": "50 mcg", "frequency_per_day": 1, "with_food": "empty_stomach", "confidence": 0.93},
+    {"raw_name": "Calcium Carbonate 600mg", "rxcui": "318076", "ingredient": "calcium carbonate",
+     "strength": "600 mg", "frequency_per_day": 2, "with_food": "with_food", "confidence": 0.88},
+    {"raw_name": "Warfarin 5mg", "rxcui": "855332", "ingredient": "warfarin",
+     "strength": "5 mg", "frequency_per_day": 1, "with_food": "any", "confidence": 0.91},
+    {"raw_name": "Ibuprofn 200", "rxcui": null, "ingredient": "ibuprofen",
+     "strength": "200 mg", "frequency_per_day": 3, "with_food": "with_food", "confidence": 0.58}
+  ],
+  "warnings": ["Stub response from backend (Block A)."]
+}
