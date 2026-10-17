@@ -1,3 +1,63 @@
-key.txt
-*.env
-.*
+# --- AI agent / editor tooling ---
+.claude/
+CLAUDE.local.md
+.cursor/
+.codex/
+.copilot/
+.aider*
+.continue/
+.windsurf/
+.vscode/
+.idea/
+*.code-workspace
+
+# --- macOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# --- Secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.mobileprovision
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+
+# --- Backend data (regenerate with scripts/) ---
+backend/data/chroma/
+backend/data/labels/
+backend/data/cache/
+*.sqlite3
+*.log
+
+# --- Xcode / Swift ---
+DerivedData/
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.moved-aside
+.build/
+.swiftpm/
+Pods/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# --- Node (if any tooling) ---
+node_modules/
