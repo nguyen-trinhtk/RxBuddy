@@ -1,0 +1,33 @@
+# One ingredient per line. Placeholder list (Block A "human owns" pick) — edit freely.
+# Known clash pairs
+levothyroxine
+calcium carbonate
+ferrous sulfate
+ciprofloxacin
+magnesium hydroxide
+aluminum hydroxide
+doxycycline
+warfarin
+ibuprofen
+sertraline
+tramadol
+alendronate
+simvastatin
+clarithromycin
+spironolactone
+potassium chloride
+# Common meds for safe pairs
+lisinopril
+metformin
+atorvastatin
+amlodipine
+losartan
+metoprolol
+omeprazole
+acetaminophen
+aspirin
+gabapentin
+prednisone
+fluoxetine
+amoxicillin
+cetirizine

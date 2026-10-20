@@ -61,3 +61,6 @@ Pods/
 
 # --- Node (if any tooling) ---
 node_modules/
+
+# --- Personal notes (block reports etc.) ---
+docs/personal/
